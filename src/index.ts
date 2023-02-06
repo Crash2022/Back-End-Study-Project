@@ -36,20 +36,30 @@ app.get('/products/:id', (req: Request, res: Response) => {
         res.send(404)
     }
 })
-app.get('/products/:productTitle', (req: Request, res: Response) => {
-    let product = products.find(el => el.title === req.params.productTitle)
-    // если id будет цифрой, то надо перевести в строку
-    // let product = products.find(el => el.title === +req.params.productTitle)
-
-    if(product) {
-        res.send(product)
-    } else {
-        res.send(404)
-    }
-})
+// работает один из запросов, одновременно два не работают
+// app.get('/products/:productTitle', (req: Request, res: Response) => {
+//     let product = products.find(el => el.title === req.params.productTitle)
+//     // если id будет цифрой, то надо перевести в строку
+//     // let product = products.find(el => el.title === +req.params.productTitle)
+//
+//     if(product) {
+//         res.send(product)
+//     } else {
+//         res.send(404)
+//     }
+// })
 
 // delete PRODUCTS
-
+app.delete('/products/:id', (req: Request, res: Response) => {
+    for (let i = 0; i < products.length; i++) {
+        if (products[i].id === req.params.id) {
+            products.splice(i,1)
+            res.send(204)
+            return
+        }
+    }
+    res.send(404)
+})
 
 
 //---------------------------------------------------------------------
