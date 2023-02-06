@@ -18,7 +18,7 @@ app.use(parserMiddleware)
 //----------------------------------------------------
 
 // пример #1 Middleware
-let authGuardMiddleware = (req: Request, res: Response, next: NextFunction) => {
+const authGuardMiddleware = (req: Request, res: Response, next: NextFunction) => {
     // @ts-ignore
     if (req.query.token === '123') {
         next()
@@ -31,7 +31,7 @@ let authGuardMiddleware = (req: Request, res: Response, next: NextFunction) => {
 
 // пример #2 Middleware
 let counterRequest = 0
-let counterMiddleware = (req: Request, res: Response, next: NextFunction) => {
+const counterMiddleware = (req: Request, res: Response, next: NextFunction) => {
     counterRequest++
     next()
 

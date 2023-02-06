@@ -1,10 +1,15 @@
 import {Request, Response, Router} from 'express'
 import {productsRepository} from '../repositories/products.repository';
 import {body, validationResult} from 'express-validator';
+import {titleValidationMiddleware} from '../middlewares/validation-middleware';
 
 // router - презентационный слой
 // создание роутера
 export const productsRouter = Router()
+
+const titleValidation = body('title').trim()
+    .isLength({min: 3, max: 10})
+    .withMessage('title length must be 3-10 symbols')
 
 // ---GET REQUESTS---
 // QUERY params
@@ -57,20 +62,17 @@ productsRouter.get('/:id', (req: Request, res: Response) => {
 productsRouter.post('/',
 
     // title must have length
-    body('title').isLength({min: 3, max: 10}).withMessage('title length must be 3-10 symbols'),
+    // body('title').trim().isLength({min: 3, max: 10}).withMessage('title length must be 3-10 symbols'),
+    titleValidation,
+    titleValidationMiddleware,
 
     (req: Request, res: Response) => {
 
-        const errors = validationResult(req);
-        if (!errors.isEmpty()) {
-            return res.status(400).json({errors: errors.array()});
-        }
-
-        // User.create({
-        //     username: req.body.username,
-        //     password: req.body.password,
-        // }).then(user => res.json(user));
-
+        // заменили на titleValidationMiddleware
+        // const errors = validationResult(req);
+        // if (!errors.isEmpty()) {
+        //     return res.status(400).json({errors: errors.array()});
+        // }
 
         const requestTitle = req.body.title
 
@@ -85,7 +87,7 @@ productsRouter.post('/',
         // const newProduct = { id: +(new Date()), title: req.body.title }
 // products.push(newProduct)
 // res.status(201).send(newProduct)
-})
+    })
 
 // ---DELETE REQUESTS---
 // delete products
@@ -110,23 +112,27 @@ productsRouter.delete('/:id', (req: Request, res: Response) => {
 
 // ---PUT REQUESTS---
 // update product
-productsRouter.put('/:id', (req: Request, res: Response) => {
-    const isUpdatedProduct = productsRepository.updateProduct(+req.params.id, req.body.title)
+productsRouter.put('/:id',
+    titleValidation,
+    titleValidationMiddleware,
+    (req: Request, res: Response) => {
 
-    // если продукт обновился, то находим его заново и обновляем
-    if (isUpdatedProduct) {
-        res.send(productsRepository.findProductById(+req.params.id))
-    } else {
-        res.send(404)
-    }
+        const isUpdatedProduct = productsRepository.updateProduct(+req.params.id, req.body.title)
 
-    // let product = products.find(el => el.id === +req.params.id)
-    //
-    // if(product) {
-    //     product.title = req.body.title
-    //     res.send(200)
-    //     res.send(product)
-    // } else {
-    //     res.send(404)
-    // }
-})
+        // если продукт обновился, то находим его заново и обновляем
+        if (isUpdatedProduct) {
+            res.send(productsRepository.findProductById(+req.params.id))
+        } else {
+            res.send(404)
+        }
+
+        // let product = products.find(el => el.id === +req.params.id)
+        //
+        // if(product) {
+        //     product.title = req.body.title
+        //     res.send(200)
+        //     res.send(product)
+        // } else {
+        //     res.send(404)
+        // }
+    })
