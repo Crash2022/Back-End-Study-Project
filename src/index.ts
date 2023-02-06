@@ -33,7 +33,6 @@ app.get('/products', (req: Request, res: Response) => {
 })
 // params
 app.get('/products/:id', (req: Request, res: Response) => {
-    // если id будет цифрой, то надо перевести в строку
     let product = products.find(el => el.id === +req.params.id)
 
     if(product) {
@@ -74,6 +73,20 @@ app.post('/products/', (req: Request, res: Response) => {
     const newProduct = { id: +(new Date()), title: req.body.title }
     products.push(newProduct)
     res.status(201).send(newProduct)
+})
+
+// PUT REQUESTS
+// update product
+app.put('/products/:id', (req: Request, res: Response) => {
+    let product = products.find(el => el.id === +req.params.id)
+
+    if(product) {
+        product.title = req.body.title
+        res.send(200)
+        res.send(product)
+    } else {
+        res.send(404)
+    }
 })
 
 //---------------------------------------------------------------------
