@@ -1,21 +1,31 @@
 import {Request, Response, Router} from 'express'
+import {addressesRepository} from '../repositories/addresses-repository';
+import {productsRepository} from '../repositories/products.repository';
 
+// router - презентационный слой
 // создание роутера
 export const addressesRouter = Router()
 
-const addresses = [{id: 1, value: 'Sovetskaya, 17'}, {id: 2, title: 'Naberejnaya, 10'}]
-
 // get addresses
 addressesRouter.get('/', (req: Request, res: Response) => {
-    res.send(addresses)
+    res.send(addressesRepository.findAddresses())
+    // res.send(addresses)
 })
 // with URI params
 addressesRouter.get('/:id', (req: Request, res: Response) => {
-    let address = addresses.find(el => el.id === +req.params.id)
+    const foundedAddressWithId = addressesRepository.findAddressesById(+req.params.id)
 
-    if(address) {
-        res.send(address)
+    if(foundedAddressWithId) {
+        res.send(foundedAddressWithId)
     } else {
         res.send(404)
     }
+
+    // let address = addresses.find(el => el.id === +req.params.id)
+    //
+    // if(address) {
+    //     res.send(address)
+    // } else {
+    //     res.send(404)
+    // }
 })
