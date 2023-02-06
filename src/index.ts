@@ -1,12 +1,18 @@
+import express, {Request, Response} from 'express'
+import bodyParser from 'body-parser'
+
 // https://back-end-study-project.vercel.app/
 
 // create express app
-import express, {Request, Response} from 'express'
 const app = express()
 const port = 3000
+// const port = process.env.PORT || 3000
 
-const products = [{id: '1', title: 'mango'}, {id: '2', title: 'orange'}]
-const addresses = [{id: '1', value: 'Sovetskaya, 17'}, {id: '2', title: 'Naberejnaya, 10'}]
+const products = [{id: 1, title: 'mango'}, {id: 2, title: 'orange'}]
+const addresses = [{id: 1, value: 'Sovetskaya, 17'}, {id: 2, title: 'Naberejnaya, 10'}]
+
+const parserMiddleware = bodyParser({})
+app.use(parserMiddleware)
 
 // get requests
 // get PRODUCTS
@@ -26,9 +32,8 @@ app.get('/products', (req: Request, res: Response) => {
 })
 // params
 app.get('/products/:id', (req: Request, res: Response) => {
-    let product = products.find(el => el.id === req.params.id)
     // если id будет цифрой, то надо перевести в строку
-    // let product = products.find(el => el.title === +req.params.id)
+    let product = products.find(el => el.id === +req.params.id)
 
     if(product) {
         res.send(product)
@@ -52,7 +57,7 @@ app.get('/products/:id', (req: Request, res: Response) => {
 // delete PRODUCTS
 app.delete('/products/:id', (req: Request, res: Response) => {
     for (let i = 0; i < products.length; i++) {
-        if (products[i].id === req.params.id) {
+        if (products[i].id === +req.params.id) {
             products.splice(i,1)
             res.send(204)
             return
@@ -61,6 +66,12 @@ app.delete('/products/:id', (req: Request, res: Response) => {
     res.send(404)
 })
 
+// post new PRODUCT
+app.post('/products/', (req: Request, res: Response) => {
+    const newProduct = { id: +(new Date()), title: req.body.title }
+    products.push(newProduct)
+    res.status(201).send(newProduct)
+})
 
 //---------------------------------------------------------------------
 
@@ -69,9 +80,7 @@ app.get('/addresses', (req: Request, res: Response) => {
     res.send(addresses)
 })
 app.get('/addresses/:id', (req: Request, res: Response) => {
-    let address = addresses.find(el => el.id === req.params.id)
-    // если id будет цифрой, то надо перевести в строку
-    // let address = addresses.find(el => el.id === +req.params.id)
+    let address = addresses.find(el => el.id === +req.params.id)
 
     if(address) {
         res.send(address)
