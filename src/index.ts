@@ -1,7 +1,7 @@
 import express, {Request, Response} from 'express'
 import bodyParser from 'body-parser'
-import {productsRouter} from './routes/products-router';
-import {addressesRouter} from './routes/addresses-router';
+import {productsRouter} from './routes/products-router'
+import {addressesRouter} from './routes/addresses-router'
 
 // https://back-end-study-project.vercel.app/
 
@@ -20,8 +20,8 @@ app.get('/', (req: Request, res: Response) => {
 })
 
 // подключение к отдельным роутам
-app.use('products', productsRouter)
-app.use('addresses', addressesRouter)
+app.use('/products', productsRouter)
+app.use('/addresses', addressesRouter)
 
 // start app
 app.listen(port, () => {

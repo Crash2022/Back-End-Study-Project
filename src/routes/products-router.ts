@@ -1,7 +1,7 @@
-import {Request, Response, Router} from 'express';
+import {Request, Response, Router} from 'express'
 
 // создание роутера
-export const productsRouter = Router({})
+export const productsRouter = Router()
 
 const products = [{id: 1, title: 'mango'}, {id: 2, title: 'orange'}]
 
