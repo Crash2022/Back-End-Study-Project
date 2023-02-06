@@ -8,7 +8,8 @@ export const productsRouter = Router()
 // ---GET REQUESTS---
 // QUERY params
 productsRouter.get('/', (req: Request, res: Response) => {
-    const foundedProducts = productsRepository.findProducts(req.query.title ? req.query.title.toString() : null )
+    const foundedProducts = productsRepository
+        .findProducts(req.query.title ? req.query.title.toString() : null )
     res.send(foundedProducts)
 
     // if (req.query.title) {
