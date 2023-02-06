@@ -51,6 +51,17 @@ productsRouter.get('/:id', (req: Request, res: Response) => {
 //     }
 // })
 
+// ---POST REQUESTS---
+// create new product
+productsRouter.post('/', (req: Request, res: Response) => {
+    const newProduct = productsRepository.createProduct(req.body.title)
+    res.status(201).send(newProduct)
+
+    // const newProduct = { id: +(new Date()), title: req.body.title }
+    // products.push(newProduct)
+    // res.status(201).send(newProduct)
+})
+
 // ---DELETE REQUESTS---
 // delete products
 productsRouter.delete('/:id', (req: Request, res: Response) => {
@@ -70,17 +81,6 @@ productsRouter.delete('/:id', (req: Request, res: Response) => {
     //     }
     // }
     // res.send(404)
-})
-
-// ---POST REQUESTS---
-// create new product
-productsRouter.post('/', (req: Request, res: Response) => {
-    const newProduct = productsRepository.createProduct(req.body.title)
-    res.status(201).send(newProduct)
-
-    // const newProduct = { id: +(new Date()), title: req.body.title }
-    // products.push(newProduct)
-    // res.status(201).send(newProduct)
 })
 
 // ---PUT REQUESTS---
