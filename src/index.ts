@@ -43,14 +43,14 @@ let counterMiddleware = (req: Request, res: Response, next: NextFunction) => {
 // app.use(counterMiddleware)
 
 // пример подключения Middleware к конкретному роуту
-app.get('/products', counterMiddleware, (req: Request, res: Response) => {
-    res.send({value: 'Counter: ' + counterRequest})
-
-    // *пример передачи информации
-    // @ts-ignore
-    // const title = req.title
-    // res.send({value: 'Counter: ' + title})
-})
+// app.get('/products', counterMiddleware, (req: Request, res: Response) => {
+//     res.send({value: 'Counter: ' + counterRequest})
+//
+//     // *пример передачи информации
+//     // @ts-ignore
+//     // const title = req.title
+//     // res.send({value: 'Counter: ' + title})
+// })
 
 //----------------------------------------------------
 

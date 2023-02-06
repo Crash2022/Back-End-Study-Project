@@ -1,5 +1,6 @@
 import {Request, Response, Router} from 'express'
 import {productsRepository} from '../repositories/products.repository';
+import {body, validationResult} from 'express-validator';
 
 // router - презентационный слой
 // создание роутера
@@ -9,7 +10,7 @@ export const productsRouter = Router()
 // QUERY params
 productsRouter.get('/', (req: Request, res: Response) => {
     const foundedProducts = productsRepository
-        .findProducts(req.query.title ? req.query.title.toString() : null )
+        .findProducts(req.query.title ? req.query.title.toString() : null)
     res.send(foundedProducts)
 
     // if (req.query.title) {
@@ -24,7 +25,7 @@ productsRouter.get('/', (req: Request, res: Response) => {
 productsRouter.get('/:id', (req: Request, res: Response) => {
     const foundedProductWithId = productsRepository.findProductById(+req.params.id)
 
-    if(foundedProductWithId) {
+    if (foundedProductWithId) {
         res.send(foundedProductWithId)
     } else {
         res.send(404)
@@ -53,13 +54,37 @@ productsRouter.get('/:id', (req: Request, res: Response) => {
 
 // ---POST REQUESTS---
 // create new product
-productsRouter.post('/', (req: Request, res: Response) => {
-    const newProduct = productsRepository.createProduct(req.body.title)
-    res.status(201).send(newProduct)
+productsRouter.post('/',
 
-    // const newProduct = { id: +(new Date()), title: req.body.title }
-    // products.push(newProduct)
-    // res.status(201).send(newProduct)
+    // title must have length
+    body('title').isLength({min: 3, max: 10}).withMessage('title length must be 3-10 symbols'),
+
+    (req: Request, res: Response) => {
+
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({errors: errors.array()});
+        }
+
+        // User.create({
+        //     username: req.body.username,
+        //     password: req.body.password,
+        // }).then(user => res.json(user));
+
+
+        const requestTitle = req.body.title
+
+        // валидация body вручную
+        // if (!requestTitle.trim()) {
+        //     res.status(400).send({message: 'title is required'})
+        // }
+
+        const newProduct = productsRepository.createProduct(requestTitle)
+        res.status(201).send(newProduct)
+
+        // const newProduct = { id: +(new Date()), title: req.body.title }
+// products.push(newProduct)
+// res.status(201).send(newProduct)
 })
 
 // ---DELETE REQUESTS---
