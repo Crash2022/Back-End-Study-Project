@@ -32,14 +32,20 @@ let counterRequest = 0
 let counterMiddleware = (req: Request, res: Response, next: NextFunction) => {
     counterRequest++
     next()
+
+    // пример передачи информации
+    // @ts-ignore
+    // req.title = 'blablabla'
+    // next()
 }
 // app.use(counterMiddleware)
 
 // пример подключения Middleware к конкретному роуту
 app.get('/products', counterMiddleware, (req: Request, res: Response) => {
     // @ts-ignore
-    const title = req.title;
-    res.send({value: 'Counter: ' + counterRequest});
+    // const title = req.title
+    // res.send({value: 'Counter: ' + title})
+    res.send({value: 'Counter: ' + counterRequest})
 })
 
 //----------------------------------------------------
