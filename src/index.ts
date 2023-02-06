@@ -17,6 +17,7 @@ app.use(parserMiddleware)
 
 //----------------------------------------------------
 
+// пример #1 Middleware
 let authGuardMiddleware = (req: Request, res: Response, next: NextFunction) => {
     // @ts-ignore
     if (req.query.token === '123') {
@@ -28,12 +29,13 @@ let authGuardMiddleware = (req: Request, res: Response, next: NextFunction) => {
 }
 // app.use(authGuardMiddleware)
 
+// пример #2 Middleware
 let counterRequest = 0
 let counterMiddleware = (req: Request, res: Response, next: NextFunction) => {
     counterRequest++
     next()
 
-    // пример передачи информации
+    // *пример передачи информации
     // @ts-ignore
     // req.title = 'blablabla'
     // next()
@@ -42,10 +44,12 @@ let counterMiddleware = (req: Request, res: Response, next: NextFunction) => {
 
 // пример подключения Middleware к конкретному роуту
 app.get('/products', counterMiddleware, (req: Request, res: Response) => {
+    res.send({value: 'Counter: ' + counterRequest})
+
+    // *пример передачи информации
     // @ts-ignore
     // const title = req.title
     // res.send({value: 'Counter: ' + title})
-    res.send({value: 'Counter: ' + counterRequest})
 })
 
 //----------------------------------------------------
