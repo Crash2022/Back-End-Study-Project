@@ -11,11 +11,12 @@ const port = 3000
 const products = [{id: 1, title: 'mango'}, {id: 2, title: 'orange'}]
 const addresses = [{id: 1, value: 'Sovetskaya, 17'}, {id: 2, title: 'Naberejnaya, 10'}]
 
+// при отправке post запроса необходимо распарсить body-post
 const parserMiddleware = bodyParser({})
 app.use(parserMiddleware)
 
-// get requests
-// get PRODUCTS
+// GET REQUESTS
+// get products
 app.get('/', (req: Request, res: Response) => {
     res.send('Hello Samurai!')
 })
@@ -54,7 +55,8 @@ app.get('/products/:id', (req: Request, res: Response) => {
 //     }
 // })
 
-// delete PRODUCTS
+// DELETE REQUESTS
+// delete products
 app.delete('/products/:id', (req: Request, res: Response) => {
     for (let i = 0; i < products.length; i++) {
         if (products[i].id === +req.params.id) {
@@ -66,7 +68,8 @@ app.delete('/products/:id', (req: Request, res: Response) => {
     res.send(404)
 })
 
-// post new PRODUCT
+// POST REQUESTS
+// post new product
 app.post('/products/', (req: Request, res: Response) => {
     const newProduct = { id: +(new Date()), title: req.body.title }
     products.push(newProduct)
@@ -75,7 +78,7 @@ app.post('/products/', (req: Request, res: Response) => {
 
 //---------------------------------------------------------------------
 
-// get ADDRESSES
+// get addresses
 app.get('/addresses', (req: Request, res: Response) => {
     res.send(addresses)
 })
