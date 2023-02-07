@@ -1,7 +1,8 @@
 import {Request, Response, Router} from 'express'
-import {productsRepository} from '../repositories/products-db.repository';
-import {body, validationResult} from 'express-validator';
-import {titleValidationMiddleware} from '../middlewares/validation-middleware';
+import {productsRepository} from '../repositories/products-in-memory.repository'
+// import {productsRepository} from '../repositories/products-db.repository'
+import {body, validationResult} from 'express-validator'
+import {titleValidationMiddleware} from '../middlewares/validation-middleware'
 
 export type ProductType = {
     id: number
@@ -10,7 +11,7 @@ export type ProductType = {
 
 // router - презентационный слой
 // создание роутера
-export const productsRouter = Router()
+export const productsRouter = Router({})
 
 const titleValidation = body('title').trim()
     .isLength({min: 3, max: 10})

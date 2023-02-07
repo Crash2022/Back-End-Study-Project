@@ -1,12 +1,12 @@
-// repository - дата-слой
+// repository - дата-слой (DAL)
 
 import {ProductType} from "../routes/products-router";
 import {client} from "./db";
 
-const __products = [
-    {id: 1, title: 'mango'},
-    {id: 2, title: 'orange'}
-]
+// const __products = [
+//     {id: 1, title: 'mango'},
+//     {id: 2, title: 'orange'}
+// ]
 
 export const productsRepository = {
     async findProducts(searchTitle: string | null): Promise<ProductType[]> {

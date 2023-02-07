@@ -1,4 +1,4 @@
-// repository - дата-слой
+// repository - дата-слой (DAL)
 
 import {ProductType} from "../routes/products-router";
 

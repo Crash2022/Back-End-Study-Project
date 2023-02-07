@@ -1,7 +1,7 @@
 import {MongoClient} from 'mongodb'
 
-// const mongoURI = process.env.mongoURI || 'mongodb://0.0.0.0:27107'
-const mongoURI = 'mongodb://0.0.0.0:27107'
+// const mongoURI = process.env.mongoURI || 'mongodb://0.0.0.0:27017'
+const mongoURI = 'mongodb://0.0.0.0:27017'
 
 export const client = new MongoClient(mongoURI)
 
