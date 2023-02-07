@@ -1,6 +1,5 @@
 import {Request, Response, Router} from 'express'
 import {addressesRepository, AddressesType} from '../repositories/addresses-repository';
-import {productsRepository} from '../repositories/products.repository';
 
 // router - презентационный слой
 // создание роутера
