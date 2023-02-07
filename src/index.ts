@@ -2,6 +2,7 @@ import express, {NextFunction, Request, Response} from 'express'
 import bodyParser from 'body-parser'
 import {productsRouter} from './routes/products-router'
 import {addressesRouter} from './routes/addresses-router'
+import {runDb} from "./repositories/db";
 
 // https://back-end-study-project.vercel.app/
 
@@ -64,6 +65,14 @@ app.use('/products', productsRouter)
 app.use('/addresses', addressesRouter)
 
 // start app
-app.listen(port, () => {
-    console.log(`Example app listening on port ${port}`)
-})
+const startApp = async() => {
+    await runDb()
+    app.listen(port, () => {
+        console.log(`Example app listening on port ${port}`)
+    })
+}
+startApp()
+
+// app.listen(port, () => {
+//     console.log(`Example app listening on port ${port}`)
+// })
