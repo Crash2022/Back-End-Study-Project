@@ -1,7 +1,12 @@
 import {Request, Response, Router} from 'express'
-import {productsRepository, ProductsType} from '../repositories/products.repository';
+import {productsRepository} from '../repositories/products-db.repository';
 import {body, validationResult} from 'express-validator';
 import {titleValidationMiddleware} from '../middlewares/validation-middleware';
+
+export type ProductType = {
+    id: number
+    title: string
+}
 
 // router - презентационный слой
 // создание роутера
@@ -15,7 +20,7 @@ const titleValidation = body('title').trim()
 // QUERY params
 productsRouter.get('/',
     async (req: Request, res: Response) => {
-    const foundedProducts: ProductsType[] = await productsRepository
+    const foundedProducts: ProductType[] = await productsRepository
         .findProducts(req.query.title ? req.query.title.toString() : null)
     res.send(foundedProducts)
 
@@ -83,7 +88,7 @@ productsRouter.post('/',
         //     res.status(400).send({message: 'title is required'})
         // }
 
-        const newProduct: ProductsType = await productsRepository.createProduct(requestTitle)
+        const newProduct: ProductType = await productsRepository.createProduct(requestTitle)
         res.status(201).send(newProduct)
 
         // const newProduct = { id: +(new Date()), title: req.body.title }
@@ -124,7 +129,7 @@ productsRouter.put('/:id',
 
         // если продукт обновился, то находим его заново и обновляем
         if (isUpdatedProduct) {
-            res.send(productsRepository.findProductById(+req.params.id))
+            res.send(await productsRepository.findProductById(+req.params.id))
         } else {
             res.send(404)
         }
