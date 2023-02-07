@@ -1,6 +1,6 @@
 import {Request, Response, Router} from 'express'
-import {productsRepository} from '../repositories/products-in-memory.repository'
-// import {productsRepository} from '../repositories/products-db.repository'
+// import {productsRepository} from '../repositories/products-in-memory.repository'
+import {productsRepository} from '../repositories/products-db.repository'
 import {body, validationResult} from 'express-validator'
 import {titleValidationMiddleware} from '../middlewares/validation-middleware'
 
