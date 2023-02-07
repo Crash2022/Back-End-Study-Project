@@ -2,30 +2,29 @@
 // данные из базы MongoDB
 
 import {ProductType} from "../routes/products-router";
-import {client} from "./db";
+import {productsCollection} from './db';
 
 export const productsRepository = {
-    async findProducts(searchTitle: string | null): Promise<ProductType[]> {
+    async findProducts(searchTitle: string | null | undefined): Promise<ProductType[]> {
+        const filter: any = {}
+
         if (searchTitle) {
-            return client.db('shop')
-                .collection<ProductType>('products')
-                .find({ title: {$regex: searchTitle} })
-                .toArray()
-
-            // return __products.filter(p => p.title.includes(searchTitle))
-        } else {
-            return client.db('shop')
-                .collection<ProductType>('products')
-                .find({ })
-                .toArray()
-
-            // return __products
+           filter.title = {$regex: searchTitle}
         }
+        return productsCollection.find(filter).toArray()
+
+        // другой вариант записи
+        // if (searchTitle) {
+        //     return productsCollection.find({ title: {$regex: searchTitle} }).toArray()
+        //
+        //     // return __products.filter(p => p.title.includes(searchTitle))
+        // } else {
+        //     return productsCollection.find({ }).toArray()
+        //     // return __products
+        // }
     },
     async findProductById(searchId: number) {
-        const product: ProductType | null = await client.db('shop')
-            .collection<ProductType>('products')
-            .findOne({ id: searchId })
+        const product: ProductType | null = await productsCollection.findOne({ id: searchId })
 
         if (product) {
             return product
@@ -37,20 +36,17 @@ export const productsRepository = {
     async createProduct(productTitle: string): Promise<ProductType> {
         const newProduct = { id: +(new Date()), title: productTitle }
 
-        const result = await client.db('shop')
-            .collection<ProductType>('products')
-            .insertOne(newProduct)
+        const result = await productsCollection.insertOne(newProduct)
 
         return newProduct
         // __products.push(newProduct)
     },
     async deleteProduct(productId: number): Promise<boolean> {
-        const result = await client.db('shop')
-            .collection<ProductType>('products')
-            .deleteOne({id: productId})
+        const result = await productsCollection.deleteOne({id: productId})
 
         return result.deletedCount === 1
 
+        // вариант до рефакторинга
         // for (let i = 0; i < __products.length; i++) {
         //     if (__products[i].id === +productId) {
         //         __products.splice(i,1)
@@ -60,12 +56,11 @@ export const productsRepository = {
         // return false
     },
     async updateProduct(productId: number, productTitle: string): Promise<boolean> {
-        const result = await client.db('shop')
-            .collection<ProductType>('products')
-            .updateOne({id: productId}, {$set: {title: productTitle}})
+        const result = await productsCollection.updateOne({id: productId}, {$set: {title: productTitle}})
 
         return result.matchedCount === 1
 
+        // вариант до рефакторинга
         // let product = __products.find(el => el.id === +productId)
         //
         // if(product) {

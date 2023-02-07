@@ -1,9 +1,13 @@
 import {MongoClient} from 'mongodb'
+import {ProductType} from '../routes/products-router';
 
 // const mongoURI = process.env.mongoURI || 'mongodb://0.0.0.0:27017'
 const mongoURI = 'mongodb://0.0.0.0:27017'
 
-export const client = new MongoClient(mongoURI)
+const client = new MongoClient(mongoURI)
+
+// доступ к коллекциям
+export const productsCollection = client.db('shop').collection<ProductType>('products')
 
 export async function runDb() {
     try {
