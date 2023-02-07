@@ -1,27 +1,32 @@
 // repository - дата-слой
 
+export type ProductsType = {
+    id: number
+    title: string
+}
+
 const products = [
     {id: 1, title: 'mango'},
     {id: 2, title: 'orange'}
 ]
 
 export const productsRepository = {
-    findProducts(searchTitle: string | null) {
+    async findProducts(searchTitle: string | null): Promise<ProductsType[]> {
         if (searchTitle) {
             return products.filter(p => p.title.includes(searchTitle))
         } else {
             return products
         }
     },
-    findProductById(searchId: number) {
+    async findProductById(searchId: number) {
         return products.find(el => el.id === +searchId)
     },
-    createProduct(productTitle: string) {
+    async createProduct(productTitle: string): Promise<ProductsType> {
         const newProduct = { id: +(new Date()), title: productTitle }
         products.push(newProduct)
         return newProduct
     },
-    deleteProduct(productId: number) {
+    async deleteProduct(productId: number): Promise<boolean> {
         for (let i = 0; i < products.length; i++) {
             if (products[i].id === +productId) {
                 products.splice(i,1)
@@ -30,7 +35,7 @@ export const productsRepository = {
         }
         return false
     },
-    updateProduct(productId: number, productTitle: string) {
+    async updateProduct(productId: number, productTitle: string): Promise<boolean> {
         let product = products.find(el => el.id === +productId)
 
         if(product) {

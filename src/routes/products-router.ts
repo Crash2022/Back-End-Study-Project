@@ -1,5 +1,5 @@
 import {Request, Response, Router} from 'express'
-import {productsRepository} from '../repositories/products.repository';
+import {productsRepository, ProductsType} from '../repositories/products.repository';
 import {body, validationResult} from 'express-validator';
 import {titleValidationMiddleware} from '../middlewares/validation-middleware';
 
@@ -13,8 +13,9 @@ const titleValidation = body('title').trim()
 
 // ---GET REQUESTS---
 // QUERY params
-productsRouter.get('/', (req: Request, res: Response) => {
-    const foundedProducts = productsRepository
+productsRouter.get('/',
+    async (req: Request, res: Response) => {
+    const foundedProducts: ProductsType[] = await productsRepository
         .findProducts(req.query.title ? req.query.title.toString() : null)
     res.send(foundedProducts)
 
@@ -27,8 +28,9 @@ productsRouter.get('/', (req: Request, res: Response) => {
     // }
 })
 // URI params
-productsRouter.get('/:id', (req: Request, res: Response) => {
-    const foundedProductWithId = productsRepository.findProductById(+req.params.id)
+productsRouter.get('/:id',
+    async (req: Request, res: Response) => {
+    const foundedProductWithId = await productsRepository.findProductById(+req.params.id)
 
     if (foundedProductWithId) {
         res.send(foundedProductWithId)
@@ -66,7 +68,7 @@ productsRouter.post('/',
     titleValidation,
     titleValidationMiddleware,
 
-    (req: Request, res: Response) => {
+    async (req: Request, res: Response) => {
 
         // заменили на titleValidationMiddleware
         // const errors = validationResult(req);
@@ -81,7 +83,7 @@ productsRouter.post('/',
         //     res.status(400).send({message: 'title is required'})
         // }
 
-        const newProduct = productsRepository.createProduct(requestTitle)
+        const newProduct: ProductsType = await productsRepository.createProduct(requestTitle)
         res.status(201).send(newProduct)
 
         // const newProduct = { id: +(new Date()), title: req.body.title }
@@ -91,8 +93,9 @@ productsRouter.post('/',
 
 // ---DELETE REQUESTS---
 // delete products
-productsRouter.delete('/:id', (req: Request, res: Response) => {
-    const isDeletedProduct = productsRepository.deleteProduct(+req.params.id)
+productsRouter.delete('/:id',
+    async (req: Request, res: Response) => {
+    const isDeletedProduct = await productsRepository.deleteProduct(+req.params.id)
 
     if (isDeletedProduct) {
         res.send(204)
@@ -115,9 +118,9 @@ productsRouter.delete('/:id', (req: Request, res: Response) => {
 productsRouter.put('/:id',
     titleValidation,
     titleValidationMiddleware,
-    (req: Request, res: Response) => {
+    async (req: Request, res: Response) => {
 
-        const isUpdatedProduct = productsRepository.updateProduct(+req.params.id, req.body.title)
+        const isUpdatedProduct = await productsRepository.updateProduct(+req.params.id, req.body.title)
 
         // если продукт обновился, то находим его заново и обновляем
         if (isUpdatedProduct) {

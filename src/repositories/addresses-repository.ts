@@ -1,15 +1,20 @@
 // repository - дата-слой
 
+export type AddressesType = {
+    id: number
+    value: string
+}
+
 const addresses = [
     {id: 1, value: 'Sovetskaya, 17'},
-    {id: 2, title: 'Naberejnaya, 10'}
+    {id: 2, value: 'Naberejnaya, 10'}
 ]
 
 export const addressesRepository = {
-    findAddresses() {
+    async findAddresses(): Promise<AddressesType[]> {
         return addresses
     },
-    findAddressesById(addressId: number) {
+    async findAddressesById(addressId: number) {
         return addresses.find(el => el.id === +addressId)
     }
 }
