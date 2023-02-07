@@ -1,7 +1,7 @@
 // repository - дата-слой (DAL)
 // локальный массив данных
 
-import {ProductType} from "../routes/products-router";
+import {ProductType} from './db';
 
 const products = [
     {id: 1, title: 'mango'},

@@ -1,5 +1,4 @@
 import {MongoClient} from 'mongodb'
-import {ProductType} from '../routes/products-router';
 
 // const mongoURI = process.env.mongoURI || 'mongodb://0.0.0.0:27017'
 const mongoURI = 'mongodb://0.0.0.0:27017'
@@ -21,4 +20,10 @@ export async function runDb() {
         // Ensures that the client will close when you finish/error
         await client.close()
     }
+}
+
+// types
+export type ProductType = {
+    id: number
+    title: string
 }

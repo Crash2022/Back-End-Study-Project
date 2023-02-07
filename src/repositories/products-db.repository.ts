@@ -1,8 +1,7 @@
 // repository - дата-слой (DAL)
 // данные из базы MongoDB
 
-import {ProductType} from "../routes/products-router";
-import {productsCollection} from './db';
+import {productsCollection, ProductType} from './db';
 
 export const productsRepository = {
     async findProducts(searchTitle: string | null | undefined): Promise<ProductType[]> {
@@ -33,17 +32,16 @@ export const productsRepository = {
             return null
         }
     },
-    async createProduct(productTitle: string): Promise<ProductType> {
-        const newProduct = { id: +(new Date()), title: productTitle }
-
+    async createProduct(newProduct: ProductType): Promise<ProductType> {
+    // async createProduct(productTitle: string): Promise<ProductType> {
+        // было до бизнес-слоя (products-service)
+        // const newProduct = { id: +(new Date()), title: productTitle }
         const result = await productsCollection.insertOne(newProduct)
-
         return newProduct
         // __products.push(newProduct)
     },
     async deleteProduct(productId: number): Promise<boolean> {
         const result = await productsCollection.deleteOne({id: productId})
-
         return result.deletedCount === 1
 
         // вариант до рефакторинга
@@ -57,7 +55,6 @@ export const productsRepository = {
     },
     async updateProduct(productId: number, productTitle: string): Promise<boolean> {
         const result = await productsCollection.updateOne({id: productId}, {$set: {title: productTitle}})
-
         return result.matchedCount === 1
 
         // вариант до рефакторинга
