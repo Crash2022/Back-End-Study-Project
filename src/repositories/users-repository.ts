@@ -55,7 +55,7 @@ const users: UsersType[] = [
     },
     {
         id: 5,
-        name: "Chelsey Dietrich",
+        name: "Leanne Graham",
         username: "Kamren",
         age: 54,
         email: "Lucio_Hettinger@annie.ca",
@@ -82,13 +82,81 @@ type UsersType = {
     }
 }
 
+type SortedBy<T> = {
+    filedName: keyof T
+    direction: 'asc' | 'desc'
+}
+
 export const usersRepository = {
+    // простой способ сортировки
     sort() {
+        // два разных способа сортировки
+
+        // asc (ascending, по возрастанию)
         // return [...users].sort((a,b) => a.age < b.age ? -1 : 1)
-        // return [...users].sort((a,b) => a.name.toUpperCase() < b.name.toUpperCase() ? -1 : 1)
-        return [...users].sort((a,b) => a.address.city.localeCompare(b.address.city))
+
+        // desc (descending, по убыванию)
+        return [...users].sort((a, b) => a.name.toUpperCase() < b.name.toUpperCase() ? 1 : -1)
+
+        // return [...users].sort((a,b) => a.address.city.localeCompare(b.address.city))
+    },
+
+    // подробная запись
+    /*sortedBy<T>(items: T[], sortBy: SortedBy<T>, thenBy: SortedBy<T>) {
+        return [...items].sort((a,b) => {
+            if (a[sortBy.filedName] < b[sortBy.filedName]) {
+                return sortBy.direction === 'asc' ? -1: 1
+            } else {
+                return 1
+            }
+            if (a[sortBy.filedName] > b[sortBy.filedName]) {
+                return sortBy.direction === 'asc' ? 1: -1
+            } else {
+                return 1
+            }
+
+            // сортировка по второму свойству
+
+            if (a[thenBy.filedName] < b[thenBy.filedName]) {
+                return thenBy.direction === 'asc' ? -1: 1
+            } else {
+                return 1
+            }
+
+            if (a[thenBy.filedName] > b[thenBy.filedName]) {
+                return thenBy.direction === 'asc' ? 1: -1
+            } else {
+                return 1
+            }
+        })
+    }*/
+
+    // более короткая запись через цикл
+    sortedBy<T>(items: T[], sortBy: SortedBy<T>[]) {
+
+        return [...items].sort((a, b) => {
+            for (let sortConfig of sortBy) {
+                if (a[sortConfig.filedName] < b[sortConfig.filedName]) {
+                    return sortConfig.direction === 'asc' ? -1 : 1
+                }
+                if (a[sortConfig.filedName] > b[sortConfig.filedName]) {
+                    return sortConfig.direction === 'asc' ? 1 : -1
+                }
+            }
+            return 0
+        })
     }
 }
 
 // yarn ts-node .\src\repositories\users-repository.ts - запустить консоль
-console.log(usersRepository.sort())
+// console.log(usersRepository.sort())
+
+console.log(usersRepository.sortedBy(users,
+        [
+            // сперва идет сортировка по имени
+            {filedName: 'name', direction: 'asc'},
+            // далее по возрасту (в случае, если значение первого свойства совпали)
+            {filedName: 'age', direction: 'desc'}
+        ]
+    )
+)
