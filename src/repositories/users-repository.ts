@@ -132,7 +132,8 @@ export const usersRepository = {
     }*/
 
     // более короткая запись через цикл
-    sortedBy<T>(items: T[], sortBy: SortedBy<T>[]) {
+    // с помощью rest-оператора можем передавать любое количество объектов без массива
+    sortedBy<T>(items: T[], ...sortBy: SortedBy<T>[]) {
 
         return [...items].sort((a, b) => {
             for (let sortConfig of sortBy) {
@@ -152,11 +153,9 @@ export const usersRepository = {
 // console.log(usersRepository.sort())
 
 console.log(usersRepository.sortedBy(users,
-        [
-            // сперва идет сортировка по имени
-            {filedName: 'name', direction: 'asc'},
-            // далее по возрасту (в случае, если значение первого свойства совпали)
-            {filedName: 'age', direction: 'desc'}
-        ]
+        // сперва идет сортировка по имени
+        {filedName: 'name', direction: 'asc'},
+        // далее по возрасту (в случае, если значение первого свойства совпали)
+        {filedName: 'age', direction: 'desc'}
     )
 )
