@@ -83,9 +83,12 @@ type UsersType = {
 }
 
 export const usersRepository = {
-
     sort() {
-        // sort
+        // return [...users].sort((a,b) => a.age < b.age ? -1 : 1)
+        // return [...users].sort((a,b) => a.name.toUpperCase() < b.name.toUpperCase() ? -1 : 1)
+        return [...users].sort((a,b) => a.address.city.localeCompare(b.address.city))
     }
-
 }
+
+// yarn ts-node .\src\repositories\users-repository.ts - запустить консоль
+console.log(usersRepository.sort())
